@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/reservroom"
+    username: "postgres"
+    password: "pass123"
+  sql:
+    init:
+      mode: always #initialize the data from resources when start the app
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop # what to do when application is started, create when start delete everything when stopped
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: "org.hibernate.dialect.PostgreSQL81Dialect"
