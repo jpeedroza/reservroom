@@ -1,4 +1,4 @@
-package com.jpeedroza.reservroom.utils;
+package com.jpeedroza.reservroom.utils.message;
 
 import lombok.Builder;
 import lombok.Data;

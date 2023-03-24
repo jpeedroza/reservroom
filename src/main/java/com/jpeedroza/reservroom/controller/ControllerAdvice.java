@@ -1,8 +1,8 @@
 package com.jpeedroza.reservroom.controller;
 
 import com.jpeedroza.reservroom.exceptions.RoomNotFoundException;
-import com.jpeedroza.reservroom.utils.DetailsError;
-import com.jpeedroza.reservroom.utils.ErrorResponse;
+import com.jpeedroza.reservroom.utils.message.DetailsError;
+import com.jpeedroza.reservroom.utils.message.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

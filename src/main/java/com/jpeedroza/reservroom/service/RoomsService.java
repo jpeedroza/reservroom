@@ -1,8 +1,9 @@
 package com.jpeedroza.reservroom.service;
 
-import com.jpeedroza.reservroom.entity.Rooms;
+import com.jpeedroza.reservroom.dto.RoomDTO;
 import com.jpeedroza.reservroom.exceptions.RoomNotFoundException;
 import com.jpeedroza.reservroom.repository.RoomsRepository;
+import com.jpeedroza.reservroom.utils.mapper.RoomMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,38 +14,44 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class RoomsService {
 
   private final RoomsRepository roomsRepository;
+  private final RoomMapper roomMapper;
 
-  public List<Rooms> findAllRooms() {
-    return roomsRepository.findAll();
+  public List<RoomDTO> findAllRooms() {
+    return roomsRepository.findAll()
+            .stream()
+            .map(roomMapper::convertToDTO)
+            .collect(Collectors.toList());
   }
 
-  public Rooms findSpecificRoomById(@PathVariable Long id) {
+  public RoomDTO findSpecificRoomById(@PathVariable Long id) {
     return roomsRepository
             .findById(id)
+            .map(roomMapper::convertToDTO)
             .orElseThrow(() -> new RoomNotFoundException(id));
   }
 
-  public Rooms saveNewRoom(@RequestBody Rooms room) {
-    return roomsRepository.save(room);
+  public RoomDTO saveNewRoom(@RequestBody RoomDTO room) {
+    return roomMapper.convertToDTO(
+            roomsRepository.save(roomMapper.convertToEntity(room)));
   }
 
-  public Rooms saveValuesFromExistingRoom(@PathVariable Long id, @RequestBody Rooms room) {
+  public RoomDTO saveValuesFromExistingRoom(@PathVariable Long id, @RequestBody RoomDTO room) {
     return roomsRepository.findById(id)
             .map(room1 -> {
-              return roomsRepository.save(Rooms.builder()
-                      .name(room.getName())
-                      .description(room.getDescription())
-                      .location(room.getLocation())
-                      .userName(room.getUserName())
-                      .timePosted(LocalDateTime.now())
-                      .valuePerDay(room.getValuePerDay())
-                      .build());
+              room1.setName(room.getName());
+              room1.setDescription(room.getDescription());
+              room1.setLocation(room.getLocation());
+              room1.setUserName(room.getUserName());
+              room1.setTimePosted(LocalDateTime.now());
+              room1.setValuePerDay(room.getValuePerDay());
+              return roomMapper.convertToDTO(room1);
             })
             .orElseThrow(() -> new RoomNotFoundException(id));
   }

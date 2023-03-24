@@ -1,4 +1,4 @@
-package com.jpeedroza.reservroom.utils;
+package com.jpeedroza.reservroom.utils.message;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.AllArgsConstructor;
